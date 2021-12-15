@@ -56,9 +56,10 @@ vector<int> randSplit(int n,int sum,int minLimit=0,int maxLimit=2139062143)
 	sum-=n*minLimit;
 	if(sum<0||maxLimit<minLimit)
 		return ans;
+	maxLimit-=minLimit;
 	for(int i=1;i<=n;i++)
 	{
-		ans.push_back(minLimit+(i==n?sum:randNum(0,min(maxLimit-minLimit,2*sum/(n-i+1)))));
+		ans.push_back(minLimit+(i==n?sum:randNum(max(0,sum-maxLimit*(n-i)),min(maxLimit,2*sum/(n-i+1)))));
 		sum-=(ans[i-1]-minLimit);
 	}
 	shuffle(ans.begin(),ans.end(),Rand);
