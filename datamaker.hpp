@@ -6,7 +6,7 @@ char inFile[1024],outFile[1024];
 char cmd[1024];
 char problemName[1024];
 inline
-void init(string filename="",int dataId=0)
+void init(string fineName="",int dataId=0)
 {
 	freopen("gen.cfg","r",stdin);
 	int g=0;
@@ -16,8 +16,8 @@ void init(string filename="",int dataId=0)
 	Rand=mt19937(g);
 	if(dataId!=-1)
 	{
-		sprintf(inFile,"%s%d.in",filename.c_str(),dataId);
-		sprintf(problemName,"%s",filename.c_str());
+		sprintf(inFile,"%s%d.in",fineName.c_str(),dataId);
+		sprintf(problemName,"%s",fineName.c_str());
 		freopen(inFile,"w",stdout);
 		return;
 	}
