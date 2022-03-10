@@ -30,6 +30,7 @@ void genOut(int dataId)
 	sprintf(cmd,"%s.exe < %s%d.in > %s%d.out",problemName,problemName,dataId,problemName,dataId);
 	system(cmd);
 }
+#define int long long
 inline
 int randNum(int minLimit,int maxLimit)
 {
@@ -97,3 +98,4 @@ vector<vector<int>> randTree(int n)
 	ans[*lef.begin()].push_back(n);
 	return ans;
 }
+#undef int
