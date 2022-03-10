@@ -13,7 +13,7 @@ void init(string filename="",int dataId=-1)
 	cin>>g;
 	freopen("gen.cfg","w",stdout);
 	cout<<g+1<<endl;
-	Rand=mt19937(g);
+	Rand=mt19937_64(g);
 	if(dataId!=-1)
 	{
 		sprintf(inFile,"%s%d.in",filename.c_str(),dataId);
