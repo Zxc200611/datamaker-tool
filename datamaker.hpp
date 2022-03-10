@@ -1,7 +1,7 @@
 #pragma once
 #include<bits/stdc++.h>
 using namespace std;
-mt19937 Rand;
+mt19937_64 Rand;
 char inFile[1024],outFile[1024];
 char cmd[1024];
 char problemName[1024];
