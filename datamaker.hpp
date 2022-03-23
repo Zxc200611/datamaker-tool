@@ -98,4 +98,21 @@ vector<vector<int>> randTree(int n)
 	ans[*lef.begin()].push_back(n);
 	return ans;
 }
+namespace charSet
+{
+	string lowLetters="abcdefghijklmnopqrstuvwxyz";
+	string capLetters="ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+	string numbers="0123456789";
+}
+inline
+string randString(int minLen,int maxLen,string charSet)
+{
+	int len=randNum(minLen,maxLen);
+	string ans="";
+	for(int i=1;i<=len;i++)
+	{
+		ans+=charSet[randNum(0,charSet.size()-1)];
+	}
+	return ans;
+}
 #undef int
