@@ -27,7 +27,7 @@ inline
 void genOut(int dataId)
 {
 	fclose(stdout);
-	sprintf(cmd,"%s.exe < %s%d.in > %s%d.out",problemName,problemName,dataId,problemName,dataId);
+	sprintf(cmd,"./%s.lexe < %s%d.in > %s%d.out",problemName,problemName,dataId,problemName,dataId);
 	system(cmd);
 }
 #define int long long
@@ -42,9 +42,7 @@ inline
 pair<int,int> randInterval(int minLimit,int maxLimit)
 {
 	int n=maxLimit-minLimit+1;
-	int l=randNum(1,n),r=l;
-	while(r==l)
-		r=randNum(1,n);
+	int l=randNum(1,n),r=randNum(1,n);
 	if(r<=l)
 		swap(l,r);
 	return make_pair(minLimit+l-1,minLimit+r-1);
@@ -66,37 +64,79 @@ vector<int> randSplit(int n,int sum,int minLimit=0,int maxLimit=2139062143)
 	shuffle(ans.begin(),ans.end(),Rand);
 	return ans;
 }
-inline 
+inline
+vector<int> pruferDecode(vector<int> prf,int n)
+{
+	vector<int> fth(n+1),deg(n+1,1);
+	for(int i=1;i<prf.size();i++)
+		deg[prf[i]]+=1;
+	int u=1;
+	for(int i=1;i<prf.size();)
+	{
+		while(deg[u]!=1)
+			u++;
+		if(u==n)
+			break;
+		int v=u;
+		while(deg[v]==1)
+		{
+			fth[v]=prf[i];
+			deg[v]--;
+			deg[prf[i]]--;
+			i++;
+			if(i==prf.size()||prf[i-1]>u)
+				break;
+			v=prf[i-1];
+		}
+	}
+	fth[prf.back()]=n;
+	return fth;
+}
+void orderTree(vector<vector<int>> &t,int u,int f,vector<vector<int>> &ans)
+{
+	for(int i=0;i<t[u].size();i++)
+	{
+		int v=t[u][i];
+		if(v==f)
+			continue;
+		ans[u].push_back(v);
+		orderTree(t,v,u,ans);
+	}
+}
+inline
 vector<vector<int>> randTree(int n)
 {
-	vector<vector<int>> ans;
-	vector<int> prf,deg;
-	set<int> lef;
-	ans.clear(),prf.clear(),deg.clear(),lef.clear();
-	for(int i=0;i<=n;i++)
-	{
-		deg.push_back(0);
-		ans.push_back(vector<int>({}));
-	}
+	vector<int> prf(1,0);
+	vector<vector<int>> t(n+1,vector<int>(0));
 	for(int i=1;i<=n-2;i++)
-	{
 		prf.push_back(randNum(1,n));
-		deg[prf.back()]+=1;
+	vector<int> fth=pruferDecode(prf,n);
+	for(int i=n;i>=1;i--)
+	{	
+		if(fth[i]==0)
+			continue;
+		t[fth[i]].push_back(i);
+		t[i].push_back(fth[i]);
 	}
-	for(int i=1;i<=n;i++)
-	{
-		if(deg[i]==0)
-			lef.insert(i);
-	}
-	for(int i=1;i<=n-2;i++)
-	{
-		ans[prf[i-1]].push_back(*lef.rbegin());
-		lef.erase(*lef.rbegin());
-		if((deg[prf[i-1]]-=1)==0)
-			lef.insert(prf[i-1]);
-	}
-	ans[*lef.begin()].push_back(n);
+	vector<vector<int>> ans(n+1,vector<int>(0));
+	orderTree(t,1,0,ans);
 	return ans;
+}
+void buildBracketString(vector<vector<int>> &t,int u,string &s)
+{
+	for(int i=0;i<t[u].size();i++)
+	{
+		s+='(';
+		buildBracketString(t,t[u][i],s);
+		s+=')';
+	}
+}
+string randBracketString(int n)
+{
+	vector<vector<int>> t=randTree(n+1);
+	string s="";
+	buildBracketString(t,1,s);
+	return s;
 }
 namespace charSet
 {
